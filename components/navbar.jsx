@@ -13,10 +13,16 @@ export default function Navbar() {
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav">
                 <li className="nav-item">
-                    <a className={`nav-link ${router.pathname === '/training' ? 'active' : ''}`} aria-current={router.pathname === '/training' ? 'page' : undefined} href="/training">Training Model</a>
+                    <a className={`nav-link ${router.pathname === '/training' ? 'active' : ''}`} aria-current={router.pathname === '/training' ? 'page' : undefined} href="/training">
+                    <i className="fa-solid fa-flask-vial pe-2"></i>
+                      Training Model
+                    </a>
                 </li>
                 <li className="nav-item">
-                    <a className={`nav-link ${router.pathname === '/result' ? 'active' : ''}`} aria-current={router.pathname === '/result' ? 'page' : undefined} href="/result">Model Results</a>
+                    <a className={`nav-link ${router.pathname === '/result' ? 'active' : ''}`} aria-current={router.pathname === '/result' ? 'page' : undefined} href="/result">
+                      <i className="fa-solid fa-robot pe-2"></i>
+                      Model Results
+                    </a>
                 </li>
               </ul>
             </div>
