@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import axios from 'axios';
 import Layout from '../components/layout';
+
+
 
 export default function Training() {
     const [file, setFile] = useState(null);
-    const [output, setOutput] = useState([]);
+    const [output, setOutput] = useState("");
 
     const sendMessage = async () => {
         if (!file) {
@@ -15,20 +18,20 @@ export default function Training() {
         formData.append('file', file);
 
         try {
-            const response = await fetch('http://26.237.202.99:8000/detection/api/upload_image/', {
-                method: 'POST',
-                body: formData,
-            });
-
+            const response = await axios.post(
+                `${process.env.HTTP_URL}/detection/api/upload_image/`,
+                 formData,
+                 { timeout: 1000 }
+                );
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const data = await response.json();
-            setOutput((prevOutput) => [...prevOutput, data]);
+            setOutput(response.data);
             setFile(null);
         } catch (error) {
-            console.error('Error sending file:', error);
+            console.error(error);
         }
     };
 

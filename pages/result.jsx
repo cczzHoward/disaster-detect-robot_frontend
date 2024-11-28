@@ -5,7 +5,7 @@ export default function Result() {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        const socket = new WebSocket('ws://26.237.202.99:8000/ws/live_feed/');
+        const socket = new WebSocket(`${process.env.WEBSOCKET_URL}/ws/live_feed/`);
 
         socket.onopen = () => {
             console.log('WebSocket connection established');
