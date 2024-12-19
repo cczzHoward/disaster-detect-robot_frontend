@@ -2,8 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    HTTP_URL: "http://26.237.202.99:8000",
-    WEBSOCKET_URL: "ws://26.237.202.99:8000"
+    HTTP_URL: "http://26.244.63.82:8000",
+    WEBSOCKET_URL: "ws://26.244.63.82:8000"
   },
 };
 
