@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import Message from "./message";
-// import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function ResultMain() {
   const peerConnectionRef = useRef(null);
@@ -15,33 +14,39 @@ export default function ResultMain() {
 
   const alertConnection = () => {
     const newAlertSocket = new WebSocket(
-      `${process.env.WEBSOCKET_URL}/ws/alerts/`
+        `${process.env.WEBSOCKET_URL}/ws/alerts/`
     );
     setAlertSocket(newAlertSocket);
 
     newAlertSocket.onopen = () => {
-      console.log("Alert WebSocket connection established");
+        console.log("Alert WebSocket connection established");
     };
 
     newAlertSocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const message = data.message;
-      const imageBase64 = data.image;
+        const data = JSON.parse(event.data);
+        const message = data.message;
+        const imageBase64 = data.image;
 
-      // console.log("Alert message received:", message);
-      // console.log("Image received:", imageBase64);
+        // console.log("Alert message received:", message);
+        // console.log("Image received:", imageBase64);
 
-      setAlertMessage(message);
-      setAlertImage(imageBase64);
-      setShowModal(true);
+        // 播放音效
+        const audio = new Audio("/alert_sound.mp3");
+        audio.play().catch((e) => {
+          console.error("音效播放時發生錯誤：", e);
+        });
+
+        setAlertMessage(message);
+        setAlertImage(imageBase64);
+        setShowModal(true);
     };
 
     newAlertSocket.onclose = () => {
-      console.log("Alert WebSocket connection closed");
+        console.log("Alert WebSocket connection closed");
     };
 
     newAlertSocket.onerror = (error) => {
-      console.error("Alert WebSocket error:", error);
+        console.error("Alert WebSocket error:", error);
     };
   };
 
@@ -145,7 +150,7 @@ export default function ResultMain() {
         <div className="col text-center">
           <h1 className="display-4">Live Camera Feed</h1>
           {!isConnected && (
-            <button className="btn btn-primary mb-3" onClick={startConnection}>
+            <button className="btn btn-dark mb-3" onClick={startConnection}>
               Start Connection
             </button>
           )}
