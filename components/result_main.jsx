@@ -11,6 +11,7 @@ export default function ResultMain() {
   const [showModal, setShowModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertImage, setAlertImage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const alertConnection = () => {
     const newAlertSocket = new WebSocket(
@@ -31,10 +32,10 @@ export default function ResultMain() {
         // console.log("Image received:", imageBase64);
 
         // 播放音效
-        const audio = new Audio("/alert_sound.mp3");
-        audio.play().catch((e) => {
-          console.error("音效播放時發生錯誤：", e);
-        });
+        // const audio = new Audio("/alert_sound.mp3");
+        // audio.play().catch((e) => {
+        //   console.error("音效播放時發生錯誤：", e);
+        // });
 
         setAlertMessage(message);
         setAlertImage(imageBase64);
@@ -52,13 +53,14 @@ export default function ResultMain() {
 
   const startConnection = () => {
     setMessage("Initializing WebSocket connection...");
+    setIsLoading(true);
     alertConnection();
     const newSocket = new WebSocket(`${process.env.WEBSOCKET_URL}/ws/webrtc/`);
     setSocket(newSocket);
 
     newSocket.onopen = () => {
       console.log("WebSocket connection established");
-      setMessage("WebSocket connection established");
+      setMessage("Loading...");
       setIsConnected(true);
       createOffer(newSocket);
     };
@@ -79,12 +81,14 @@ export default function ResultMain() {
       console.log("WebSocket connection closed");
       setMessage("WebSocket connection closed");
       setIsConnected(false);
+      setIsLoading(false);
     };
 
     newSocket.onerror = (error) => {
       console.error("WebSocket error:", error);
       setMessage("WebSocket error occurred");
       setIsConnected(false);
+      setIsLoading(false);
     };
   };
 
@@ -111,6 +115,7 @@ export default function ResultMain() {
         videoRef.current.srcObject = event.streams[0];
         console.log("成功接收到視訊串流，嘗試播放...");
         setMessage("Connected");
+        setIsLoading(false);
 
         videoRef.current
           .play()
@@ -155,12 +160,19 @@ export default function ResultMain() {
             </button>
           )}
           {isConnected && (
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              className="img-fluid rounded"
-            />
+            <div className="d-flex flex-column align-items-center">
+              {isLoading && (
+                <div className="spinner-border text-dark mb-3" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="img-fluid rounded"
+              />
+            </div>
           )}
           <Message message={message} />
         </div>
