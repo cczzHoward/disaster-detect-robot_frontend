@@ -32,10 +32,10 @@ export default function ResultMain() {
         // console.log("Image received:", imageBase64);
 
         // 播放音效
-        // const audio = new Audio("/alert_sound.mp3");
-        // audio.play().catch((e) => {
-        //   console.error("音效播放時發生錯誤：", e);
-        // });
+        const audio = new Audio("/alert_sound.mp3");
+        audio.play().catch((e) => {
+          console.error("音效播放時發生錯誤：", e);
+        });
 
         setAlertMessage(message);
         setAlertImage(imageBase64);
